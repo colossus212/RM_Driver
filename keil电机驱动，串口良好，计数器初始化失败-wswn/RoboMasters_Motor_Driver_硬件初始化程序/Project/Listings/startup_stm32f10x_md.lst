@@ -463,13 +463,14 @@ ARM Macro Assembler    Page 8
   305 0000001C                 END
               00000000 
               00000000 
-Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=.\object
-s\startup_stm32f10x_md.d -o.\objects\startup_stm32f10x_md.o -IM:\study.exe\嵌入
-式\机器人大赛\报名通过发布1\keil程序-wswn\RoboMasters_Motor_Driver_硬件初始化程
-序\Project\RTE -IF:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include -I
-F:\Keil_v5\ARM\CMSIS\Include --predefine="__MICROLIB SETA 1" --predefine="__UVI
-SION_VERSION SETA 513" --predefine="STM32F10X_MD SETA 1" --list=.\listings\star
-tup_stm32f10x_md.lst ..\CM3\startup_stm32f10x_md.s
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\objects\startup_stm32f10x_md.d -o.\objects\startup_stm32f10x_md.
+o -IY:\My\Projects\RoboMasters\Program\RoboMaster_Driver\keil电机驱动，串口良好
+，计数器初始化失败-wswn\RoboMasters_Motor_Driver_硬件初始化程序\Project\RTE -IC
+:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include -IC:\Keil_v5\ARM\CMS
+IS\Include --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 
+514" --predefine="STM32F10X_MD SETA 1" --list=.\listings\startup_stm32f10x_md.l
+st ..\CM3\startup_stm32f10x_md.s
 
 
 

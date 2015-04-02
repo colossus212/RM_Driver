@@ -2,7 +2,7 @@
 .\objects\tim2.o: ..\User\main.h
 .\objects\tim2.o: ..\CM3\stm32f10x.h
 .\objects\tim2.o: ..\CM3\core_cm3.h
-.\objects\tim2.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\tim2.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\tim2.o: ..\CM3\system_stm32f10x.h
 .\objects\tim2.o: ..\User\stm32f10x_conf.h
 .\objects\tim2.o: ..\Libraries\stm32f10x_adc.h
@@ -17,8 +17,8 @@
 .\objects\tim2.o: ..\Libraries\stm32f10x_tim.h
 .\objects\tim2.o: ..\Libraries\stm32f10x_usart.h
 .\objects\tim2.o: ..\Libraries\misc.h
-.\objects\tim2.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
-.\objects\tim2.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\tim2.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\tim2.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\tim2.o: ..\Mylib\encoder.h
 .\objects\tim2.o: ..\Mylib\led.h
 .\objects\tim2.o: ..\Mylib\pwm.h

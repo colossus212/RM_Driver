@@ -2,7 +2,7 @@
 .\objects\usart2.o: ..\User\main.h
 .\objects\usart2.o: ..\CM3\stm32f10x.h
 .\objects\usart2.o: ..\CM3\core_cm3.h
-.\objects\usart2.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\usart2.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\usart2.o: ..\CM3\system_stm32f10x.h
 .\objects\usart2.o: ..\User\stm32f10x_conf.h
 .\objects\usart2.o: ..\Libraries\stm32f10x_adc.h
@@ -17,8 +17,8 @@
 .\objects\usart2.o: ..\Libraries\stm32f10x_tim.h
 .\objects\usart2.o: ..\Libraries\stm32f10x_usart.h
 .\objects\usart2.o: ..\Libraries\misc.h
-.\objects\usart2.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
-.\objects\usart2.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\usart2.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\usart2.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\usart2.o: ..\Mylib\encoder.h
 .\objects\usart2.o: ..\Mylib\led.h
 .\objects\usart2.o: ..\Mylib\pwm.h

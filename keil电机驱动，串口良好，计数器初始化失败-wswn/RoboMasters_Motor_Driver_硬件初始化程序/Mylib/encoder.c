@@ -22,11 +22,13 @@ void Encoder_Configuration(void)
 							   TIM_ICPolarity_Falling,
 							   TIM_ICPolarity_Falling);
     TIM_Cmd(TIM3,ENABLE);
+
 }
 
 void Encoder_Start(void)
 {
     TIM3->CNT = 0x7fff;
+
 }
 
 int Encoder_Get_CNT(void)

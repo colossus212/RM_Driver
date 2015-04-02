@@ -2,7 +2,7 @@
 .\objects\flash.o: ..\User\main.h
 .\objects\flash.o: ..\CM3\stm32f10x.h
 .\objects\flash.o: ..\CM3\core_cm3.h
-.\objects\flash.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\flash.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\flash.o: ..\CM3\system_stm32f10x.h
 .\objects\flash.o: ..\User\stm32f10x_conf.h
 .\objects\flash.o: ..\Libraries\stm32f10x_adc.h
@@ -17,8 +17,8 @@
 .\objects\flash.o: ..\Libraries\stm32f10x_tim.h
 .\objects\flash.o: ..\Libraries\stm32f10x_usart.h
 .\objects\flash.o: ..\Libraries\misc.h
-.\objects\flash.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
-.\objects\flash.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\flash.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\flash.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\flash.o: ..\Mylib\encoder.h
 .\objects\flash.o: ..\Mylib\led.h
 .\objects\flash.o: ..\Mylib\pwm.h
