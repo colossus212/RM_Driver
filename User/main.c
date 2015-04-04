@@ -19,11 +19,12 @@ int main(void)
 	  TIM2_Start();
 	  //串口初始化
 	  USART2_Configuration();
+		Motor_Init();
 
     while(1)
     {
 			 delay_ms(500);
-			 Motor_Speed(4100);		 
+			 Motor_Speed(2000);		 
        enc_spd = Encoder_Speed; //保存现场
 			 enc_spd = abs(enc_spd); //取绝对值（abs宏使用两次被计算值，保存现场以保证前后一致）
 			 Tx_Data[1] = enc_spd/10000+0x30;
@@ -33,6 +34,6 @@ int main(void)
 			 Tx_Data[5] = enc_spd%10+0x30; 
 			 
 			 USART2_SendStr(Tx_Data);
-			 
+			 LED_RED_TOGGLE();
     }
 }
