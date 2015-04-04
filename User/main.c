@@ -4,6 +4,8 @@ int Encoder_Speed = 0;
 char Tx_Data[] = {'*','0','0','0','0','0','0','0','0','0','0','0','0','0','0','\r','\n',0};
 int main(void)
 {
+		//串口初始化
+	  USART2_Configuration();
 	  int enc_spd;
 		//LED初始化...
 		LED_Configuration();
@@ -17,8 +19,7 @@ int main(void)
 	  //定时器初始化
 		TIM2_Configuration(10);
 	  TIM2_Start();
-	  //串口初始化
-	  USART2_Configuration();
+
 		Motor_Init();
 
     while(1)
