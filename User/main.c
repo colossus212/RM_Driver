@@ -35,6 +35,6 @@ int main(void)
 			 Tx_Data[5] = enc_spd%10+0x30; 
 			 
 			 USART2_SendStr(Tx_Data);
-			 LED_RED_TOGGLE();
+			//LED_RED_TOGGLE();
     }
 }
