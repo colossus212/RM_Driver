@@ -558,6 +558,11 @@
               <FileType>1</FileType>
               <FilePath>..\User\motor.c</FilePath>
             </File>
+            <File>
+              <FileName>PID.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\PID.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

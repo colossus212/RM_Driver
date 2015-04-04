@@ -1,6 +1,6 @@
 #include "main.h"
 
-void TIM2_Configuration(int32_t sample_interval_ms)
+void TIM2_Configuration(int32_t sample_interval_ms)   //sample_interval_ms 定时
 {
     TIM_TimeBaseInitTypeDef  tim;
     NVIC_InitTypeDef         nvic;
@@ -26,7 +26,7 @@ void TIM2_Configuration(int32_t sample_interval_ms)
     tim.TIM_Prescaler = TIM2_Clock_MHZ - 1;
     tim.TIM_CounterMode = TIM_CounterMode_Up;
     tim.TIM_ClockDivision = TIM_CKD_DIV1;
-    tim.TIM_Period = Period-1;                     //5ms 定时
+    tim.TIM_Period = Period-1;                     
 
     TIM_TimeBaseInit(TIM2,&tim);
 }
@@ -45,6 +45,7 @@ void TIM2_IRQHandler(void)
     if (TIM_GetITStatus(TIM2,TIM_IT_Update)!= RESET) 
 	  {
 		    Encoder_Speed = Encoder_Get_CNT();
+			  Num_10ms++;
         TIM_ClearFlag(TIM2, TIM_FLAG_Update);	
     }
 
