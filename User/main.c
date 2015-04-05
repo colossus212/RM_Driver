@@ -34,8 +34,9 @@ int main(void)
     while(1)
     {
 			 delay_ms(200);
-			 Motor_Speed(Fun_Speed-4800);
-       if(Num_10ms>5){	                                            //  5ms*10=50ms		
+			 // Motor_Speed(Fun_Speed-4800);
+       Motor_Speed(4000);
+			 if(Num_10ms>5){	                                            //  5ms*10=50ms		
 				 enc_spd = Encoder_Speed; //保存现场
 				 enc_spd = abs(enc_spd); //取绝对值（abs宏使用两次被计算值，保存现场以保证前后一致）
 				 Tx_Data[1] = enc_spd/10000+0x30;

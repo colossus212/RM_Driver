@@ -36,8 +36,10 @@
 
 # Keil object files
 Project/Objects/
+Project/Listings/
 
 # Keil project files
 Project/JLinkLog.txt
 Project/STM32F103C.uvguix.*
 Project/*.bak
+
