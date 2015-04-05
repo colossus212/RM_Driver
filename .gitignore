@@ -30,3 +30,14 @@
 
 # Debug files
 *.dSYM/
+
+# Mac trash store
+.DS_Store
+
+# Keil object files
+Project/Objects/
+
+# Keil project files
+Project/JLinkLog.txt
+Project/STM32F103C.uvguix.*
+Project/*.bak

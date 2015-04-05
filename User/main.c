@@ -11,11 +11,13 @@ unsigned int Num_10ms = 0;
 	
 int main(void)
 {
+	  extern int16_t Fun_Speed;
 	  int enc_spd;
 		//LED初始化...
 		LED_Configuration();
 		//PWM初始化...
 	  PWM_Configuration();
+	  CAN_Configuration();
 	  //delay()初始化...
 	  delay_init();
 	  //计数初始化
@@ -28,11 +30,11 @@ int main(void)
 	  USART2_Configuration();
 	  //电机初始化
 		Motor_Init();
-
+		
     while(1)
     {
-			 //delay_ms(500);
-			 Motor_Speed(2000);	
+			 delay_ms(200);
+			 Motor_Speed(Fun_Speed-4800);
        if(Num_10ms>5){	                                            //  5ms*10=50ms		
 				 enc_spd = Encoder_Speed; //保存现场
 				 enc_spd = abs(enc_spd); //取绝对值（abs宏使用两次被计算值，保存现场以保证前后一致）
@@ -43,8 +45,9 @@ int main(void)
 				 Tx_Data[5] = enc_spd%10+0x30; 
 				 //Send...
 				 USART2_SendStr(Tx_Data);
+				 
 				 Num_10ms = 0;
 			 }
-			//LED_RED_TOGGLE();
+			LED_RED_TOGGLE();
     }
 }

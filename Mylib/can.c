@@ -2,7 +2,7 @@
 
 //HVD232---CAN_TX---PB9
 //HVD232---CAN_RX---PB8
-
+int16_t Fun_Speed=4800;
 void CAN_Configuration(void)
 {
 		CAN_InitTypeDef        can;
@@ -47,11 +47,14 @@ void CAN_Configuration(void)
 		can.CAN_RFLM = DISABLE;																
 		can.CAN_TXFP = ENABLE;		
 		can.CAN_Mode = CAN_Mode_Normal;
+		
+		// TODO: Set Propriate Value
 		can.CAN_SJW = CAN_SJW_1tq;
-		can.CAN_BS1 = CAN_BS1_5tq;
-		can.CAN_BS2 = CAN_BS2_3tq;
+		can.CAN_BS1 = CAN_BS1_2tq;
+		can.CAN_BS2 = CAN_BS2_2tq;
 		// TODO: Set Properiate Prescaler
-		can.CAN_Prescaler = 4;     //CAN BaudRate 36/(1+5+3)/4=1Mbps
+
+		can.CAN_Prescaler = 5;     //CAN BaudRate 25/(1+2+2)/5=1Mbps
 		CAN_Init(CAN1, &can);
 
 		can_filter.CAN_FilterNumber = 0; 
@@ -77,6 +80,11 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
 		{
 				CAN_ClearITPendingBit(CAN1, CAN_IT_FMP0);
 				CAN_Receive(CAN1, CAN_FIFO0, &rx_message);
+			  if(rx_message.StdId == 0x80)
+				{
+						Fun_Speed = rx_message.Data[1] << 8 | rx_message.Data[0];
+				}
+				printf("%d\r\n",rx_message.StdId);
 		}
 }
 
