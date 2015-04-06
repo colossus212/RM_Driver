@@ -8,10 +8,11 @@ float Rotate_Speed = 0;
 char Tx_Data[] = {'*','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','#','\r','\n',0};
 //10ms 时钟计数
 unsigned int Num_10ms = 0;
-	
+
+int16_t dest_speed=0;
 int main(void)
 {
-	  extern int16_t Fun_Speed;
+	  
 	  int enc_spd;
 		//LED初始化...
 		LED_Configuration();
@@ -33,12 +34,13 @@ int main(void)
 		
     while(1)
     {
-			 delay_ms(200);
-			 // Motor_Speed(Fun_Speed-4800);
-       Motor_Speed(4000);
+			 delay_ms(10);
+			 Motor_Speed(dest_speed);
+
 			 if(Num_10ms>5){	                                            //  5ms*10=50ms		
 				 enc_spd = Encoder_Speed; //保存现场
 				 enc_spd = abs(enc_spd); //取绝对值（abs宏使用两次被计算值，保存现场以保证前后一致）
+				 /*
 				 Tx_Data[1] = enc_spd/10000+0x30;
 				 Tx_Data[2] = enc_spd%10000/1000+0x30;
 				 Tx_Data[3] = enc_spd%1000/100+0x30;
@@ -46,7 +48,7 @@ int main(void)
 				 Tx_Data[5] = enc_spd%10+0x30; 
 				 //Send...
 				 USART2_SendStr(Tx_Data);
-				 
+				 */
 				 Num_10ms = 0;
 			 }
 			LED_RED_TOGGLE();

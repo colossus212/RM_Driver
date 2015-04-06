@@ -27,7 +27,7 @@ void PWM_Configuration(void)
 		gpio.GPIO_Speed = GPIO_Speed_50MHz;
 		GPIO_Init(GPIOA, &gpio);
 
-		GPIO_SetBits(GPIOA,GPIO_Pin_8 | GPIO_Pin_10);
+		GPIO_ResetBits(GPIOA,GPIO_Pin_8 | GPIO_Pin_10);
 
 		tim.TIM_Period=5000;                           //ÆµÂÊ 14.4KHz
 		tim.TIM_Prescaler=0;

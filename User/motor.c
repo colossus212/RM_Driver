@@ -6,6 +6,7 @@
 #define RIGHT_LOW_ON()  GPIO_SetBits(GPIOA,GPIO_Pin_10)
 #define RIGHT_LOW_OFF() GPIO_ResetBits(GPIOA,GPIO_Pin_10)
 
+
 int32_t last_speed = 0;
 
 void Motor_Init(void)
