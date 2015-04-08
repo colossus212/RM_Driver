@@ -27,5 +27,6 @@
 extern int Encoder_Speed;
 extern unsigned int Num_10ms;
 extern float Rotate_Speed;
+extern int Target_Speed;
 
 #endif

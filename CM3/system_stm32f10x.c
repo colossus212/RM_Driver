@@ -1055,7 +1055,7 @@ static void SetSysClockTo72(void)
 		  // 当晶振为25MHz时配置为50MHz
 			RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE |
 																					RCC_CFGR_PLLMULL));
-			RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_HSE | RCC_CFGR_PLLXTPRE_HSE | RCC_CFGR_PLLMULL2);
+			RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_HSE | RCC_CFGR_PLLMULL2);
 		#else
 			/*  PLL configuration: PLLCLK = HSE * 9 = 72 MHz */
 			RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE |

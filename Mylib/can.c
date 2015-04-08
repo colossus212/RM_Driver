@@ -6,10 +6,10 @@
 // must meet bitsizeof(CAN_ADDR) <= 3 && bitsizeof(CAN_CONTROL_IDENTIFIER) <= 8
 
 
-//#define DRIVER_LEFT_FRONT
+#define DRIVER_LEFT_FRONT
 //#define DRIVER_RIGHT_FRONT
 //#define DRIVER_LEFT_END
-#define DRIVER_RIGHT_END
+//#define DRIVER_RIGHT_END
 
 #define CAN_CONTROL_IDENTIFIER 0x66
 #ifdef DRIVER_LEFT_FRONT

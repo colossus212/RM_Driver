@@ -22,7 +22,6 @@ void Encoder_Configuration(void)
 							   TIM_ICPolarity_Falling,
 							   TIM_ICPolarity_Falling);
     TIM_Cmd(TIM3,ENABLE);
-
 }
 
 void Encoder_Start(void)

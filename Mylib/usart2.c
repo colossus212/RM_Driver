@@ -60,7 +60,7 @@ void USART2_Configuration(void)
 void USART2_SendChar(char b)
 {
     while( USART_GetFlagStatus(USART2,USART_FLAG_TC) == RESET);
-	USART_SendData(USART2,b);
+	  USART_SendData(USART2,b);
 }
 
 int fputc(int ch, FILE *f)
@@ -80,8 +80,9 @@ void USART2_SendStr(char *str){                        //·¢ËÍ×Ö·û´®
 void DMA1_Channel6_IRQHandler() 
 {
     if(DMA_GetITStatus(DMA1_IT_TC6) == SET)
-    {
+    {	  
         DMA_ClearFlag(DMA1_FLAG_TC6);
-        DMA_ClearITPendingBit(DMA1_IT_TC6);
+        DMA_ClearITPendingBit(DMA1_IT_TC6);	
+		    Target_Speed = (rx_buffer[1]-0x30)*1000+(rx_buffer[2]-0x30)*100+(rx_buffer[3]-0x30)*10+(rx_buffer[4]-0x30);
     }
 }

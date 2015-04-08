@@ -76,7 +76,7 @@ void Motor_Speed(int32_t speed)
 		last_speed=speed;
 }	
 
-float Get_MxMi(float num,float max,float min)
+float Get_MxMi(int num,int max,int min)
 {
 	if(num>max)
 		return max;
@@ -86,12 +86,29 @@ float Get_MxMi(float num,float max,float min)
 		return num;
 }
 
-float vP,vI,vD;
-void Motor_velocity_control(float current_speed,float want_speed)
+int vP=5,vI=2,vD=0;
+
+//void Motor_velocity_control(int current_speed,int want_speed)
+//{
+//    long int error,last_error,error_d;
+//	  int32_t output;
+//	  static int error_i;
+//	  
+//	  error=want_speed-current_speed;
+//	  error_i+=error;
+//	  error_i=Get_MxMi(error_i,1000.0,-1000.0);
+//	  error_d=error-last_error;
+//	  last_error=error;
+//	  output=vP*error+vI*error_i+vD*error_d;
+//    output=Get_MxMi(output,4500.0,-4500.0);	
+//	  Motor_Speed(output);
+//	
+//}
+void Motor_velocity_control(int current_speed,int want_speed)
 {
-    float error,last_error,error_d;
+    int error,last_error,error_d;
 	  int32_t output;
-	  static float error_i;
+	  static int error_i=0;
 	  
 	  error=want_speed-current_speed;
 	  error_i+=error;
@@ -101,6 +118,5 @@ void Motor_velocity_control(float current_speed,float want_speed)
 	  output=vP*error+vI*error_i+vD*error_d;
     output=Get_MxMi(output,4500.0,-4500.0);	
 	  Motor_Speed(output);
-	  
-
+	
 }
