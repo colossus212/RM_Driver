@@ -6,9 +6,9 @@
 // must meet bitsizeof(CAN_ADDR) <= 3 && bitsizeof(CAN_CONTROL_IDENTIFIER) <= 8
 
 
-#define DRIVER_LEFT_FRONT
+//#define DRIVER_LEFT_FRONT
 //#define DRIVER_RIGHT_FRONT
-//#define DRIVER_LEFT_END
+#define DRIVER_LEFT_END
 //#define DRIVER_RIGHT_END
 
 #define CAN_CONTROL_IDENTIFIER 0x66
@@ -110,15 +110,20 @@ void CAN_Configuration(void)
 
 void USB_LP_CAN1_RX0_IRQHandler(void)
 {
+	  int16_t temp_speed;
 		CanRxMsg rx_message;
 		extern int16_t dest_speed;
 		if (CAN_GetITStatus(CAN1,CAN_IT_FMP0)!= RESET) 
 		{
 				CAN_ClearITPendingBit(CAN1, CAN_IT_FMP0);
 				CAN_Receive(CAN1, CAN_FIFO0, &rx_message);
-			 
-			  dest_speed = rx_message.Data[1] << 8 | rx_message.Data[0];
-				//printf("%d\r\n",rx_message.StdId);
+			  
+			  temp_speed = rx_message.Data[1] << 8 | rx_message.Data[0];
+			 #if (defined DRIVER_RIGHT_FRONT) || (defined DRIVER_RIGHT_END) || (defined DRIVER_LEFT_END)
+			 dest_speed=-temp_speed;
+			 #else
+			 dest_speed=temp_speed;
+			 #endif
 		}
 }
 

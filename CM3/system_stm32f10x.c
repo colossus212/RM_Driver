@@ -1056,6 +1056,7 @@ static void SetSysClockTo72(void)
 			RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE |
 																					RCC_CFGR_PLLMULL));
 			RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_HSE | RCC_CFGR_PLLMULL2);
+		  SystemCoreClock = 50000000;
 		#else
 			/*  PLL configuration: PLLCLK = HSE * 9 = 72 MHz */
 			RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE |

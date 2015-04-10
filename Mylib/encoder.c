@@ -2,6 +2,7 @@
 
 //encoder.INPUT_B---PB4(TIM3_CH1)
 //encoder.INPUT_A---PB5(TIM3_CH2)
+// 8000
 
 void Encoder_Configuration(void)
 {

@@ -58,10 +58,10 @@ void delay_init()
 	u32 reload;
 #endif
 	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);	//选择外部时钟  HCLK/8
-	fac_us=SystemCoreClock/8000000;	//为系统时钟的1/8  
+	fac_us=SystemCoreClock / 8000000;	//为系统时钟的1/8  
 	 
 #ifdef OS_CRITICAL_METHOD 	//如果OS_CRITICAL_METHOD定义了,说明使用ucosII了.
-	reload=SystemCoreClock/8000000;		//每秒钟的计数次数 单位为K	   
+	reload=SystemCoreClock/HSE_VALUE;		//每秒钟的计数次数 单位为K	   
 	reload*=1000000/OS_TICKS_PER_SEC;//根据OS_TICKS_PER_SEC设定溢出时间
 							//reload为24位寄存器,最大值:16777216,在72M下,约合1.86s左右	
 	fac_ms=1000/OS_TICKS_PER_SEC;//代表ucos可以延时的最少单位	   
@@ -130,9 +130,10 @@ void delay_us(u32 nus)
 //延时nms
 //注意nms的范围
 //SysTick->LOAD为24位寄存器,所以,最大延时为:
-//nms<=0xffffff*8*1000/SYSCLK
+//nms<=0xffffff*8000/SYSCLK
 //SYSCLK单位为Hz,nms单位为ms
 //对72M条件下,nms<=1864 
+//对50M，nms<=2684
 void delay_ms(u16 nms)
 {	 		  	  
 	u32 temp;		   
