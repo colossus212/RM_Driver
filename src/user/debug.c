@@ -6,13 +6,15 @@
 #include "usart2.h"
 #include "main.h"
 #include "debug.h"
+#include "led.h"
+
 
 //float Rotate_Speed = 0;
-//TX ˝æ›∞¸
+//TXÊï∞ÊçÆÂåÖ
 char Tx_Data[] =
 { '*', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
 		'0', '0', '#', '\r', '\n', 0 };
-//10ms  ±÷”º∆ ˝
+//10ms Êó∂ÈíüËÆ°Êï∞
 uint16_t Num_10ms = 0;
 
 void Do_Pid_Debug()
@@ -21,7 +23,7 @@ void Do_Pid_Debug()
 	while (1)
 	{
 		delay_ms(100);
-		enc_spd = Encoder_Speed; //±£¥Êœ÷≥°
+		enc_spd = Encoder_Speed; //‰øùÂ≠òÁé∞Âú∫
 		//Motor_velocity_control(Encoder_Speed,Target_Speed);
 		if (Num_10ms > 10)
 		{	                                            //  5ms*10=50ms		
@@ -69,4 +71,54 @@ void Do_Duty_Encoder_Test()
 		printf("  %d, %d;\r\n", i, total_spd / 10);
 	}
 	printf("]\r\n");
+}
+
+void Do_Loop_LED_Test(void)
+{
+	LED_GREEN_TOGGLE();
+	while(1)
+	{
+		delay_ms(1000);
+		LED_RED_TOGGLE();
+		LED_GREEN_TOGGLE();
+	}
+}
+
+void Do_Loop_Motor_Test(void)
+{
+	//ÁîµÊú∫ÂàùÂßãÂåñ
+	Motor_Init();
+	Motor_Enable(1);
+
+	while(1)
+	{
+
+		Motor_Speed(500);
+		LED_RED_ON();
+		LED_GREEN_OFF();
+		delay_ms(1000);
+		Motor_Speed(-500);
+		LED_RED_OFF();
+		LED_GREEN_ON();
+		delay_ms(1000);
+
+	}
+}
+
+void Do_Loop_Stabled_Motor_Test(void)
+{
+	extern int16_t Target_Speed;
+	Motor_Enable(1);
+
+	while(1)
+	{
+		Target_Speed = 50;
+		LED_RED_ON();
+		LED_GREEN_OFF();
+		delay_ms(1000);
+		Target_Speed = -50;
+		LED_RED_OFF();
+		LED_GREEN_ON();
+		delay_ms(1000);
+	}
 }

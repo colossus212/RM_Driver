@@ -1,7 +1,7 @@
 #ifndef __UTIL_H__
 #define __UTIL_H__
 
-// 注意：abs的x参量不要使用执行过程中可能发生改变的参量
+// 娉ㄦ剰锛歛bs鐨剎鍙傞噺涓嶈浣跨敤鎵ц杩囩▼涓彲鑳藉彂鐢熸敼鍙樼殑鍙傞噺
 #define abs(x) ((x)>0? (x):(-(x)))
 
 #endif

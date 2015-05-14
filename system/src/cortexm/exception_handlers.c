@@ -1,5 +1,5 @@
 //
-// This file is part of the µOS++ III distribution.
+// This file is part of the 碌OS++ III distribution.
 // Copyright (c) 2014 Liviu Ionescu.
 //
 
@@ -351,8 +351,7 @@ HardFault_Handler(void)
 __asm void __attribute__ ((section(".after_vectors"),weak))
 HardFault_Handler (void)
 {
-	tst lr,
-#4
+	tst lr,#4
 	ite eq
 	mrseq r0,msp
 	mrsne r0,psp

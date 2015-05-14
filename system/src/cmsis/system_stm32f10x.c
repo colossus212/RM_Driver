@@ -1047,7 +1047,7 @@ static void SetSysClockTo72(void)
 				RCC_CFGR_PLLMULL9);
 #else    
 #ifdef HSE_25MHZ
-		// 当晶振为25MHz时配置为50MHz
+		// 褰撴櫠鎸负25MHz鏃堕厤缃负50MHz
 		RCC->CFGR &= (uint32_t) ((uint32_t) ~(RCC_CFGR_PLLSRC
 				| RCC_CFGR_PLLXTPRE |
 				RCC_CFGR_PLLMULL));

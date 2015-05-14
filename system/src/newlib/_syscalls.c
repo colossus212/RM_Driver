@@ -1,6 +1,6 @@
 #if defined ( __GNUC__ )
 //
-// This file is part of the µOS++ III distribution.
+// This file is part of the 碌OS++ III distribution.
 // Parts of this file are from the newlib sources, issued under GPL.
 // Copyright (c) 2014 Liviu Ionescu
 //
@@ -22,6 +22,7 @@ int errno;
 #include <sys/times.h>
 #include <limits.h>
 #include <signal.h>
+#include "stm32f10x.h"
 
 void
 __initialize_args(int* p_argc, char*** p_argv);

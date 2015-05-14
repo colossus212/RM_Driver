@@ -1,6 +1,5 @@
 #include "stm32f10x.h"
 
-#define ADC1_DR_Address    ((u32)0x4001244C)
 unsigned short ADC_ConvertedValue[256];
 
 void ADC_Configuration(void)
@@ -18,7 +17,7 @@ void ADC_Configuration(void)
 	GPIO_Init(GPIOA, &gpio);
 
 	DMA_DeInit(DMA1_Channel1);
-	dma.DMA_PeripheralBaseAddr = ADC1_DR_Address;
+	dma.DMA_PeripheralBaseAddr = (uint32_t) &(ADC1->DR);
 	dma.DMA_MemoryBaseAddr = (u32) &ADC_ConvertedValue;
 	dma.DMA_DIR = DMA_DIR_PeripheralSRC;
 	dma.DMA_BufferSize = 256;

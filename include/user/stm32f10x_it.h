@@ -48,6 +48,37 @@ void SDIO_IRQHandler(void);
 void OTG_FS_IRQHandler(void);
 #endif /* STM32F10X_CL */
 
+// 中断优先级配置
+
+// 编码器计数
+#define ITP_TIM2_PREEMPTION 1
+#define ITP_TIM2_SUB 0
+
+// USART2 发送、接收
+#define ITP_USART2_GLOBAL_PREEMPTION 2
+#define ITP_USART2_GLOBAL_SUB 2
+
+// USART2 DMA发送完成
+#define ITP_USART2_DMA_TX_PREEMPTION 3
+#define ITP_USART2_DMA_TX_SUB 0
+
+// USART2 DMA接收完成
+#define ITP_USART2_DMA_RX_PREEMPTION 2
+#define ITP_USART2_DMA_RX_SUB 1
+
+// CAN1 发送完成
+#define ITP_CAN1_TX_PREEMPTION 3
+#define ITP_CAN1_TX_SUB 1
+
+// CAN1 接收完成
+#define ITP_CAN1_RX_PREEMPTION 2
+#define ITP_CAN1_RX_SUB 0
+
+// Ticker
+#define ITP_SYSTICK_PREEMPTION 0
+#define ITP_SYSTICK_SUB 0
+
+
 #endif /* __STM32F10x_IT_H */
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

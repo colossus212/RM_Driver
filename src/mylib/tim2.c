@@ -3,8 +3,11 @@
 #include "motor.h"
 #include "debug.h"
 #include "main.h"
+#include "usart2.h"
+#include <stdio.h>
+#include "stm32f10x_it.h"
 
-void TIM2_Configuration(int32_t sample_interval_ms)   //sample_interval_ms 定时
+void TIM2_Configuration(int32_t sample_interval_ms)   //sample_interval_ms 瀹氭椂
 {
 	TIM_TimeBaseInitTypeDef tim;
 	NVIC_InitTypeDef nvic;
@@ -16,8 +19,8 @@ void TIM2_Configuration(int32_t sample_interval_ms)   //sample_interval_ms 定时
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 
 	nvic.NVIC_IRQChannel = TIM2_IRQn;
-	nvic.NVIC_IRQChannelPreemptionPriority = 1;
-	nvic.NVIC_IRQChannelSubPriority = 1;
+	nvic.NVIC_IRQChannelPreemptionPriority = ITP_TIM2_PREEMPTION;
+	nvic.NVIC_IRQChannelSubPriority = ITP_TIM2_SUB;
 	nvic.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&nvic);
 
@@ -42,18 +45,34 @@ void TIM2_Start(void)
 
 }
 
+
+#define PID_CONTROL_SPEED
+
+char send_data[20];
+
 void TIM2_IRQHandler(void)
 {
+	int32_t output;
+	int16_t psize;
 
 	if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
 	{
-		Encoder_Speed = -Encoder_Get_CNT() >> 2; // TI12相同时计数
-#ifdef DRIVER_LEFT_END
-				Encoder_Speed = -Encoder_Speed;
+		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+#if ((defined DRIVER_LEFT_END) && (defined CAR_1)) |\
+		((defined DRIVER_LEFT_FRONT) && (defined CAR_2)) |\
+		((defined DRIVER_RIGHT_FRONT) && (defined CAR_2)) |\
+		((defined DRIVER_LEFT_END) && (defined CAR_2)) |\
+		((defined DRIVER_RIGHT_END) && (defined CAR_2))
+		Encoder_Speed = Encoder_Get_CNT() >> 2;
+#else
+		Encoder_Speed = -Encoder_Get_CNT() >> 2;
 #endif
-		Num_10ms++;
-		Motor_velocity_control(Encoder_Speed, Target_Speed);
-		TIM_ClearFlag(TIM2, TIM_FLAG_Update);
+
+
+#ifdef PID_CONTROL_SPEED
+		output = Motor_velocity_control(Encoder_Speed, Target_Speed);
+#endif
+
 	}
 
 }

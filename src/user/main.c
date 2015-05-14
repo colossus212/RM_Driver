@@ -1,3 +1,4 @@
+
 #include <stdint.h>
 #include <stdio.h>
 
@@ -6,50 +7,61 @@
 
 #include "led.h"
 #include "usart2.h"
-#include "pwm.h"
-#include "can.h"
 #include "delay.h"
 #include "encoder.h"
 #include "tim2.h"
+#include "can1.h"
 #include "motor.h"
 #include "debug.h"
+#include "ad.h"
+#include "ticker.h"
+#include "maincontrol.h"
 
-//µ±Ç°±àÂëÆ÷¼ÆÊıÖµ ../10ms
+
+//å½“å‰ç¼–ç å™¨è®¡æ•°å€¼ ../5ms
 int16_t Encoder_Speed = 0;
-//¸ø¶¨×ªËÙ r/10ms
+//ç»™å®šè½¬é€Ÿ .../5ms
 int16_t Target_Speed = 0;
 
-int16_t motor_dest_speed = 0;
 
 int main(void)
 {
-	//LED³õÊ¼»¯...
+	//è®¾ç½®NVICä¸­æ–­åˆ†ç»„3ä½æŠ¢å ä¼˜å…ˆçº§ï¼Œ1ä½å“åº”ä¼˜å…ˆçº§
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_3);
+
+	Ticker_Configuration();
+
 	LED_Configuration();
-	//´®¿Ú³õÊ¼»¯
+
 	USART2_Configuration();
-	//PWM³õÊ¼»¯...
-	PWM_Configuration();
-	CAN_Configuration();
-	//delay()³õÊ¼»¯...
+
 	delay_init();
-	//¼ÆÊı³õÊ¼»¯
+
+	//Do_Loop_LED_Test();
+	Do_Loop_Motor_Test();
+	DISABLE_FOLLOWING_CODE(1);
+
+	//ä¸»æ§é€šä¿¡æ§åˆ¶å™¨åˆå§‹åŒ–
+	Maincontrol_Configuration();
+
 	Encoder_Configuration();
 	Encoder_Start();
-	//¶¨Ê±Æ÷³õÊ¼»¯
-	TIM2_Configuration(10);
+
+	//é€Ÿåº¦é‡‡æ ·æ§åˆ¶å™¨åˆå§‹åŒ–
+	TIM2_Configuration(5);
 	TIM2_Start();
 
-	//µç»ú³õÊ¼»¯
+	//ç”µæµæ£€æµ‹
+	ADC_Configuration();
+
+	//ç”µæœºåˆå§‹åŒ–
 	Motor_Init();
 
 	while (1)
 	{
-		delay_ms(1000);
-
-		Target_Speed = motor_dest_speed;
-
-		printf("%d, %d\r\n", Target_Speed, Encoder_Speed);
+		delay_ms(200);
 
 		LED_RED_TOGGLE();
+		LED_GREEN_TOGGLE();
 	}
 }
