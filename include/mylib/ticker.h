@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 void Ticker_Configuration(void);
-uint32_t Ticker_GetTick(uint32_t* hit);
+uint64_t Ticker_Get_Tick();
+uint32_t Ticker_Get_MS_Tickcount();
 
 #endif

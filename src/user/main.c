@@ -28,7 +28,7 @@ int16_t Target_Speed = 0;
 int main(void)
 {
 	//设置NVIC中断分组3位抢占优先级，1位响应优先级
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_3);
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2) ;
 
 	Ticker_Configuration();
 

@@ -93,11 +93,11 @@ void Do_Loop_Motor_Test(void)
 	while(1)
 	{
 
-		Motor_Speed(500);
+		Motor_Speed(2000);
 		LED_RED_ON();
 		LED_GREEN_OFF();
 		delay_ms(1000);
-		Motor_Speed(-500);
+		Motor_Speed(-2000);
 		LED_RED_OFF();
 		LED_GREEN_ON();
 		delay_ms(1000);

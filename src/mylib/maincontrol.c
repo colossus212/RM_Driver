@@ -1,3 +1,5 @@
+#include "main.h"
+#include "can_packet.h"
 #include "maincontrol.h"
 #include "can1.h"
 #include "motor.h"
@@ -6,21 +8,24 @@
 
 void Maincontrol_Can_Receive_Handler(CanRxMsg* rx_msg)
 {
-	int16_t type;
+	uint16_t type, id;
 	uint8_t motor_mask;
 
-	type = rx_msg->StdId & CAN_PACKET_TYPE_MASK_DATATYPE;
+    type = (uint16_t) (rx_msg->StdId & CAN_PACKET_TYPE_MASK_DATATYPE);
+    id = (uint16_t) (rx_msg->StdId & CAN_PACKET_TYPE_MASK_SOURCEADDR_STRICT);
+
 	if(rx_msg->FMI == 0) // AllInOne data
 	{
 		if (type == CAN_PACKET_DRIVER_DATATYPE_ENABLE)
 		{
 			motor_mask = 1 << CAN_OFFSET;
 			Motor_Enable(
-					(rx_msg->Data[0] & motor_mask) ? 1 : 0
+                    (uint8_t) ((rx_msg->Data[0] & motor_mask) ? 1 : 0)
 			);
 		}
 		else if (type == CAN_PACKET_DRIVER_DATATYPE_CONTROL)
 		{
+			// TODO: stop when speed too small
 			Target_Speed =
 					MOTOR_WISE_PREFIX(((int16_t*) (rx_msg->Data))[CAN_OFFSET]);
 		}

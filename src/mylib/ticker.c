@@ -1,9 +1,9 @@
 #include "ticker.h"
 #include "stm32f10x_it.h"
 
-#define TICKER_CYCLE_COUNT 0x00ffffff
+#define TICKER_CYCLE_COUNT 0x01000000
 
-uint32_t timer_high = 0;
+uint64_t ticker = 0;
 
 void Ticker_Configuration(void)
 {
@@ -14,23 +14,25 @@ void Ticker_Configuration(void)
 	nvic.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&nvic);
 
-	SysTick->LOAD = TICKER_CYCLE_COUNT;
+	SysTick->LOAD = TICKER_CYCLE_COUNT - 1;
 	SysTick->CTRL = (SysTick->CTRL & 0xfffffff8) | 3; // div8, interrupt, enable
 }
 
-uint32_t Ticker_GetTick(uint32_t* hit)
+inline uint64_t Ticker_Get_Tick()
 {
-	uint32_t t = SysTick->VAL;
-	uint32_t th = timer_high;
-	if( hit != 0 )
-	{
-		*hit = th;
-	}
-	return TICKER_CYCLE_COUNT - t;
+	return ticker + TICKER_CYCLE_COUNT - SysTick->VAL;
+}
+
+inline uint32_t Ticker_Get_MS_Tickcount()
+{
+    if(SysTick->CALIB & SysTick_CALIB_NOREF_Msk)
+        return SystemCoreClock / 8000;
+    else
+        return SysTick->CALIB & SysTick_CALIB_TENMS_Msk;
 }
 
 void SysTick_Handler(void)
 {
-	timer_high++;
+	ticker += TICKER_CYCLE_COUNT;
 }
 

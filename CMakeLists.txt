@@ -119,7 +119,9 @@ set(SOURCE_FILES
     system/src/stm32f1-stdperiph/stm32f10x_spi.c
     system/src/stm32f1-stdperiph/stm32f10x_tim.c
     system/src/stm32f1-stdperiph/stm32f10x_usart.c
-    system/src/stm32f1-stdperiph/stm32f10x_wwdg.c)
+    system/src/stm32f1-stdperiph/stm32f10x_wwdg.c
+    include/mylib/can_packet.h
+    include/mylib/can_packet_queue.h)
 
 
 include_directories(include)
