@@ -27,7 +27,6 @@ set(SOURCE_FILES
     include/mylib/usart2.h
     include/user/debug.h
     include/user/main.h
-    include/user/PID.h
     system/include/cmsis/stm32f10x_conf.h
     include/user/stm32f10x_it.h
     include/user/util.h
@@ -46,7 +45,6 @@ set(SOURCE_FILES
     src/mylib/usart2.c
     src/user/debug.c
     src/user/main.c
-    src/user/PID.c
     src/user/util.c
     system/include/arm/semihosting.h
     system/include/cmsis/arm_common_tables.h
@@ -121,7 +119,9 @@ set(SOURCE_FILES
     system/src/stm32f1-stdperiph/stm32f10x_usart.c
     system/src/stm32f1-stdperiph/stm32f10x_wwdg.c
     include/mylib/can_packet.h
-    include/mylib/can_packet_queue.h)
+    include/mylib/can_packet_queue.h
+    src/mylib/pid.c
+    include/mylib/pid.h)
 
 
 include_directories(include)

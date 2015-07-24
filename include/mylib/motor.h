@@ -11,8 +11,10 @@ void Motor_Enable(uint8_t men);
 void Motor_Configuration(Motor_Config_Type mct, void* value);
 
 void Motor_Init(void);
-void Motor_Speed(int32_t speed);
-int32_t Motor_velocity_control(int current_speed, int want_speed);
+void Motor_Set_Current(int16_t current_pwm);
+void Motor_Set_Target_Speed(int16_t target_speed);
+void Motor_Speed_Control_Configuration(void);
+void Motor_Speed_Control(int16_t current_speed);
 
 #endif
 

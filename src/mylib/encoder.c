@@ -32,10 +32,10 @@ void Encoder_Start(void)
 
 }
 
-int Encoder_Get_CNT(void)
+int16_t Encoder_Get_Count(void)
 {
-	int cnt = 0;
-	cnt = (TIM3->CNT) - 0x7fff;
+	int16_t cnt = 0;
+	cnt = (int16_t) ((TIM3->CNT) - 0x7fff);
 	TIM3->CNT = 0x7fff;
 	return cnt;
 }

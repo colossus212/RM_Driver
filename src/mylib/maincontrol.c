@@ -26,8 +26,7 @@ void Maincontrol_Can_Receive_Handler(CanRxMsg* rx_msg)
 		else if (type == CAN_PACKET_DRIVER_DATATYPE_CONTROL)
 		{
 			// TODO: stop when speed too small
-			Target_Speed =
-					MOTOR_WISE_PREFIX(((int16_t*) (rx_msg->Data))[CAN_OFFSET]);
+			Motor_Set_Target_Speed(MOTOR_WISE_PREFIX(((int16_t*) (rx_msg->Data))[CAN_OFFSET]));
 		}
 	}
 	else if(rx_msg->FMI == 1) // Specific data
@@ -35,8 +34,7 @@ void Maincontrol_Can_Receive_Handler(CanRxMsg* rx_msg)
 
 		if (type == CAN_PACKET_DRIVER_DATATYPE_CONTROL)
 		{
-			Target_Speed =
-					MOTOR_WISE_PREFIX(((int16_t*) (rx_msg->Data))[0]);
+			Motor_Set_Target_Speed(MOTOR_WISE_PREFIX(((int16_t*) (rx_msg->Data))[0]));
 		}
 		else if (type == CAN_PACKET_DRIVER_DATATYPE_CONFIG)
 		{
@@ -90,9 +88,9 @@ void Maincontrol_Configuration()
 {
 	CAN1_Configuration(Maincontrol_Can_Send_Handler, Maincontrol_Can_Receive_Handler,
 			CAN_PACKET_DESTTYPE_DRIVER | CAN_PACKET_PLACETYPE_SPECIFIC | CAN_ADDR,
-			CAN_PACKET_TYPE_MASK_DESTTYPE | CAN_PACKET_TYPE_MASK_PLACETYPE | CAN_PACKET_TYPE_MASK_DESTADDR_GREEDY,
+			0,//CAN_PACKET_TYPE_MASK_DESTTYPE | CAN_PACKET_TYPE_MASK_PLACETYPE | CAN_PACKET_TYPE_MASK_DESTADDR_GREEDY,
 			CAN_PACKET_DESTTYPE_DRIVER | CAN_PACKET_PLACETYPE_ALLINONE | CAN_ADDR,
-			CAN_PACKET_TYPE_MASK_DESTTYPE | CAN_PACKET_TYPE_MASK_PLACETYPE | CAN_PACKET_TYPE_MASK_DESTADDR_GREEDY);
+			0);//CAN_PACKET_TYPE_MASK_DESTTYPE | CAN_PACKET_TYPE_MASK_PLACETYPE | CAN_PACKET_TYPE_MASK_DESTADDR_GREEDY);
 }
 
 /*

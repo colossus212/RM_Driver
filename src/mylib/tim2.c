@@ -40,37 +40,31 @@ void TIM2_Configuration(int32_t sample_interval_ms)   //sample_interval_ms å®šæ—
 void TIM2_Start(void)
 {
 	TIM_Cmd(TIM2, ENABLE);
-	TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
 	TIM_ClearFlag(TIM2, TIM_FLAG_Update);
-
+	TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
 }
 
 
 #define PID_CONTROL_SPEED
 
-char send_data[20];
-
 void TIM2_IRQHandler(void)
 {
-	int32_t output;
-	int16_t psize;
+	int16_t encoder_speed;
 
 	if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
 	{
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-#if ((defined DRIVER_LEFT_END) && (defined CAR_1)) |\
-		((defined DRIVER_LEFT_FRONT) && (defined CAR_2)) |\
-		((defined DRIVER_RIGHT_FRONT) && (defined CAR_2)) |\
-		((defined DRIVER_LEFT_END) && (defined CAR_2)) |\
-		((defined DRIVER_RIGHT_END) && (defined CAR_2))
-		Encoder_Speed = Encoder_Get_CNT() >> 2;
+//(((defined CAR_1) && (defined DRIVER_LEFT_END)) || \
+
+#if (((defined CAR_1) && !(defined DRIVER_LEFT_END)) || \
+	(defined CAR_2) || \
+    ((defined CAR_3) && (defined DRIVER_RIGHT_END)))
+		encoder_speed = Encoder_Get_Count() >> 2;
 #else
-		Encoder_Speed = -Encoder_Get_CNT() >> 2;
+        encoder_speed = -Encoder_Get_Count() >> 2;
 #endif
-
-
 #ifdef PID_CONTROL_SPEED
-		output = Motor_velocity_control(Encoder_Speed, Target_Speed);
+        Motor_Speed_Control(encoder_speed);
 #endif
 
 	}

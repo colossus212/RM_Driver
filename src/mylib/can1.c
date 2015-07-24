@@ -15,19 +15,21 @@ void (*sh)(uint16_t, int8_t);
 
 #define PACKET_QUEUE_SIZE 10
 
-uint16_t mailbox0_id=0, mailbox1_id=0, mailbox2_id=0;
+volatile uint16_t mailbox0_id=0;
+volatile uint16_t mailbox1_id=0;
+volatile uint16_t mailbox2_id=0;
 
-CAN_Packet_Queue pq[PACKET_QUEUE_SIZE];
-uint8_t pq_start = 0;
-uint8_t pq_end = 0;
-int8_t pq_full = 0;
+volatile CAN_Packet_Queue pq[PACKET_QUEUE_SIZE];
+volatile uint8_t pq_start = 0;
+volatile uint8_t pq_end = 0;
+volatile int8_t pq_full = 0;
 
-uint32_t async_transmit_times = 0;
-uint32_t queue_full_times = 0;
+volatile uint32_t async_transmit_times = 0;
+volatile uint32_t queue_full_times = 0;
 
 
-int8_t mutex_transmit = 0;
-int8_t mutex_queue = 0;
+volatile int8_t mutex_transmit = 0;
+volatile int8_t mutex_queue = 0;
 
 
 void CAN1_Configuration(void (*send_handler)(uint16_t, int8_t), void (*receive_handler)(CanRxMsg*), uint16_t IdHigh, uint16_t IdHighMask, uint16_t IdLow, uint16_t IdLowMask)
@@ -176,35 +178,61 @@ int8_t CAN1_Transmit(uint16_t id, uint16_t addr, char* data, uint8_t size)
 
 void USB_HP_CAN1_TX_IRQHandler(void)
 {
-	uint16_t id;
+	int16_t id;
 	int8_t code;
+	uint32_t tsr;
 	if (CAN_GetITStatus(CAN1, CAN_IT_TME) != RESET)
 	{
+		tsr = CAN1->TSR;
 		if(sh)
 		{
-			if(CAN1->TSR & (CAN_TSR_TME0 | CAN_TSR_TME1))
+			if((tsr & CAN_TSR_TME0) && (tsr & CAN_TSR_RQCP0))
 			{
-				if(CAN1->TSR & CAN_TSR_TME0)
-				{
-					id = mailbox0_id;
-					code = ((CAN1->TSR & CAN_TSR_TXOK0) == CAN_TSR_TXOK0);
-				}
+				CAN1->TSR = CAN_TSR_RQCP0;
+				id = mailbox0_id;
+				if (tsr & CAN_TSR_TXOK0)
+					code = 0;
+				else if (tsr & CAN_TSR_TERR0)
+					code = 1;
+				else if (tsr & CAN_TSR_ALST0)
+					code = 3;
 				else
-				{
-					id = mailbox1_id;
-					code = ((CAN1->TSR & CAN_TSR_TXOK1) == CAN_TSR_TXOK1);
-				}
+					code = 4;
+			}
+			else if((tsr & CAN_TSR_TME1) && (tsr & CAN_TSR_RQCP1))
+			{
+				CAN1->TSR = CAN_TSR_RQCP1;
+				id = mailbox1_id;
+				if (tsr & CAN_TSR_TXOK1)
+					code = 0;
+				else if (tsr & CAN_TSR_TERR1)
+					code = 1;
+				else if (tsr & CAN_TSR_ALST1)
+					code = 3;
+				else
+					code = 4;
+			}
+			else if((tsr & CAN_TSR_TME2) && (tsr & CAN_TSR_RQCP2))
+			{
+				CAN1->TSR = CAN_TSR_RQCP2;
+				id = mailbox2_id;
+				if (tsr & CAN_TSR_TXOK2)
+					code = 0;
+				else if (tsr & CAN_TSR_TERR2)
+					code = 1;
+				else if (tsr & CAN_TSR_ALST2)
+					code = 3;
+				else
+					code = 4;
 			}
 			else
 			{
-				id = mailbox2_id;
-				code = ((CAN1->TSR & CAN_TSR_TXOK2) == CAN_TSR_TXOK2);
+				id = -1;
 			}
-		}
-		CAN_ClearITPendingBit(CAN1, CAN_IT_TME);
 
-		if(sh)
-			sh(id, code);
+			if(id >= 0)
+				sh(id, code);
+		}
 
 		if(mutex_transmit == 0 && mutex_queue == 0 && (pq_full == 1 || pq_end != pq_start))
 		{

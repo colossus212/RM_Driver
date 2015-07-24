@@ -19,15 +19,9 @@
 #include "maincontrol.h"
 
 
-//当前编码器计数值 ../5ms
-int16_t Encoder_Speed = 0;
-//给定转速 .../5ms
-int16_t Target_Speed = 0;
-
-
 int main(void)
 {
-	//设置NVIC中断分组3位抢占优先级，1位响应优先级
+	//设置NVIC中断分组2位抢占优先级，2位响应优先级
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2) ;
 
 	Ticker_Configuration();
@@ -39,8 +33,8 @@ int main(void)
 	delay_init();
 
 	//Do_Loop_LED_Test();
-	Do_Loop_Motor_Test();
-	DISABLE_FOLLOWING_CODE(1);
+	//Do_Loop_Motor_Test();
+	//DISABLE_FOLLOWING_CODE(1);
 
 	//主控通信控制器初始化
 	Maincontrol_Configuration();

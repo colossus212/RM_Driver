@@ -3,17 +3,15 @@
 
 #include <stdint.h>
 
-//variables...
-extern int16_t Encoder_Speed;
-extern int16_t Target_Speed;
 
-//#define CAR_1
-#define CAR_2
+#define CAR_1
+//#define CAR_2
+//#define CAR_3
 
 //#define DRIVER_LEFT_FRONT
 //#define DRIVER_RIGHT_FRONT
-#define DRIVER_LEFT_END
-//#define DRIVER_RIGHT_END
+//#define DRIVER_LEFT_END
+#define DRIVER_RIGHT_END
 
 
 #if defined CAR_1
@@ -64,6 +62,34 @@ extern int16_t Target_Speed;
 #define MOTOR_WISE_PREFIX -
 
 #endif
+
+#elif defined CAR_3
+
+#if defined DRIVER_LEFT_FRONT
+
+#define CAN_OFFSET 0
+#define MOTOR_WISE_PREFIX -
+
+#elif defined DRIVER_RIGHT_FRONT
+
+#define CAN_OFFSET 1
+#define MOTOR_WISE_PREFIX +
+
+#elif defined DRIVER_LEFT_END
+
+#define CAN_OFFSET 2
+#define MOTOR_WISE_PREFIX -
+
+#elif defined DRIVER_RIGHT_END
+
+#define CAN_OFFSET 3
+#define MOTOR_WISE_PREFIX -
+
+#endif
+
+#else
+
+#error "no car defined !"
 
 #endif
 

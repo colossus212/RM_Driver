@@ -23,11 +23,11 @@ void Do_Pid_Debug()
 	while (1)
 	{
 		delay_ms(100);
-		enc_spd = Encoder_Speed; //保存现场
+		//enc_spd = Encoder_Speed; //保存现场
 		//Motor_velocity_control(Encoder_Speed,Target_Speed);
 		if (Num_10ms > 10)
 		{	                                            //  5ms*10=50ms		
-
+/*
 			Tx_Data[1] = enc_spd / 10000 + 0x30;
 			Tx_Data[2] = enc_spd % 10000 / 1000 + 0x30;
 			Tx_Data[3] = enc_spd % 1000 / 100 + 0x30;
@@ -43,6 +43,7 @@ void Do_Pid_Debug()
 			USART2_SendStr(Tx_Data);
 
 			Num_10ms = 0;
+			*/
 		}
 	}
 }
@@ -57,7 +58,7 @@ void Do_Duty_Encoder_Test()
 	printf("[\r\n");
 	for (i = start_duty; i <= end_duty; i += step)
 	{
-		Motor_Speed(i);
+		Motor_Set_Current(i);
 		for (j = 0; j < 5; j++)
 		{
 			delay_ms(1000);
@@ -65,7 +66,7 @@ void Do_Duty_Encoder_Test()
 		total_spd = 0;
 		for (j = 0; j < 10; j++)
 		{
-			total_spd += Encoder_Speed;
+			//total_spd += Encoder_Speed;
 			delay_ms(300);
 		}
 		printf("  %d, %d;\r\n", i, total_spd / 10);
@@ -93,11 +94,11 @@ void Do_Loop_Motor_Test(void)
 	while(1)
 	{
 
-		Motor_Speed(2000);
+		Motor_Set_Current(1000);
 		LED_RED_ON();
 		LED_GREEN_OFF();
 		delay_ms(1000);
-		Motor_Speed(-2000);
+		Motor_Set_Current(-1000);
 		LED_RED_OFF();
 		LED_GREEN_ON();
 		delay_ms(1000);

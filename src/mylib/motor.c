@@ -4,6 +4,7 @@
 #include "main.h"
 #include "util.h"
 #include "motor.h"
+#include "pid.h"
 
 //PA8----EN
 //PA9----PWM---TIM1_CH2
@@ -15,17 +16,25 @@
 #define RIGHT_LOW_ON()  GPIO_SetBits(GPIOA,GPIO_Pin_10)
 #define RIGHT_LOW_OFF() GPIO_ResetBits(GPIOA,GPIO_Pin_10)
 
-uint16_t Max_Speed = 4500;
-int8_t vP = 11, vI = 2, vD = 0;
-uint16_t Speed_Step = 20;
+static uint16_t Max_Current = 4500;
+static int8_t vP = 11, vI = 2, vD = 0;
+static uint16_t Speed_Step = 20;
 
-uint8_t M_Enable = 0;
+static uint8_t M_Enable = 0;
+
+static int16_t Target_Speed = 0;
+static int16_t Last_Real_Target_Speed = 0;
+
+static PID_Controller pid_motor_ctrl;
 
 void Motor_Init(void)
 {
+
 	TIM_TimeBaseInitTypeDef tim;
 	TIM_OCInitTypeDef oc;
 	GPIO_InitTypeDef gpio;
+
+    Motor_Speed_Control_Configuration();
 
 	RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOA |
 			RCC_APB2Periph_TIM1, ENABLE);
@@ -75,7 +84,8 @@ void Motor_Configuration(Motor_Config_Type mct, void* value)
 	switch(mct)
 	{
 	case MCT_Max_Speed:
-		Max_Speed = *(uint16_t*)value;
+		Max_Current = *(uint16_t*)value;
+        Motor_Speed_Control_Configuration();
 		break;
 	case MCT_PID:
 		vP = ((int8_t*)value)[0];
@@ -88,21 +98,20 @@ void Motor_Configuration(Motor_Config_Type mct, void* value)
 	}
 }
 
-void Motor_Speed(int32_t speed)
+void Motor_Set_Current(int16_t current_pwm)
 {
-	static int32_t last_speed = 0;
-
+	static int16_t last_speed = 0;
 	if (!M_Enable)
-		speed = 0;
-	if (abs(speed) > Max_Speed)
+		current_pwm = 0;
+	if (abs(current_pwm) > Max_Current)
 	{
-		if (speed < 0)
-			speed = -Max_Speed;
-		else if (speed > 0)
-			speed = Max_Speed;
+		if (current_pwm < 0)
+			current_pwm = -Max_Current;
+		else if (current_pwm > 0)
+			current_pwm = Max_Current;
 	}
 
-	if (speed > 0)
+	if (current_pwm > 0)
 	{
 		if (last_speed <= 0)
 		{
@@ -112,17 +121,17 @@ void Motor_Speed(int32_t speed)
 			delay_us(100);
 			RIGHT_LOW_ON();
 			delay_us(100);
-			TIM1->CCR2 = speed;
+			TIM1->CCR2 = current_pwm;
 		}
 		else
 		{
 			LEFT_LOW_OFF();
 			RIGHT_LOW_ON();
-			TIM1->CCR2 = speed;
+			TIM1->CCR2 = current_pwm;
 		}
 	}
 
-	else if (speed < 0)
+	else if (current_pwm < 0)
 	{
 		if (last_speed >= 0)
 		{
@@ -132,13 +141,13 @@ void Motor_Speed(int32_t speed)
 			delay_us(100);
 			LEFT_LOW_ON();
 			delay_us(100);
-			TIM1->CCR4 = -speed;
+			TIM1->CCR4 = -current_pwm;
 		}
 		else
 		{
 			RIGHT_LOW_OFF();
 			LEFT_LOW_ON();
-			TIM1->CCR4 = -speed;
+			TIM1->CCR4 = -current_pwm;
 		}
 	}
 	else
@@ -149,47 +158,48 @@ void Motor_Speed(int32_t speed)
 		RIGHT_LOW_OFF();
 	}
 
-	last_speed = speed;
+	last_speed = current_pwm;
 }
 
-float Get_MxMi(int num, int max, int min)
+void Motor_Set_Target_Speed(int16_t target_speed)
 {
-	if (num > max)
-		return max;
-	else if (num < min)
-		return min;
-	else
-		return num;
+    Target_Speed = target_speed;
 }
 
-/* test
- * in: vP(8bit), vI(8bit), vD(8bit), want_speed(16bit)
- * out: tick, current_speed (16bit), error_i(16bit),error_d(16bit)
-*/
-
-
-int32_t Motor_velocity_control(int current_speed, int want_speed)
+void Motor_Speed_Control_Configuration(void)
 {
-	int error, error_d;
-	int32_t output;
-	static int error_i = 0, last_error = 0;
+    PID_Controller_Configuration pcc;
+    //pcc.mode = PID_Controller_Mode_Incremental;
+	pcc.mode = PID_Controller_Mode_Absolute;
+    pcc.kp = 11;
+    pcc.ki = 2;
+    pcc.kd = 8;
+    pcc.ko = 0;
+    pcc.max_output = Max_Current;
+    pcc.min_output = -Max_Current;
+    pcc.max_integral = 1000;
+    pcc.min_integral = -1000;
+    PID_Controller_Init(&pid_motor_ctrl, &pcc);
+}
 
-	error = want_speed - current_speed;
+void Motor_Speed_Control(int16_t current_speed)
+{
+	if (!M_Enable)
+		return;
+    int16_t output;
+    int16_t real_target_speed;
+    int16_t target_speed_distance = Target_Speed - Last_Real_Target_Speed;
+    //Last_Real_Target_Speed = Target_Speed;
 
-	if(abs(error) >= Speed_Step)
-	{
-		if(error > 0) error = Speed_Step;
-		else error = -Speed_Step;
-	}
+    if(Speed_Step > 0 && abs(target_speed_distance) > Speed_Step)
+    {
+        real_target_speed = (int16_t) (Last_Real_Target_Speed + (target_speed_distance < 0? -1 : 1) * Speed_Step);
+    }
+    else
+        real_target_speed = Target_Speed;
 
-	error_i += error;
-	error_i = Get_MxMi(error_i, 1000.0, -1000.0);
-	error_d = error - last_error;
-	last_error = error;
-	output = vP * error + vI * error_i + vD * error_d;
-	output = Get_MxMi(output, Max_Speed, -Max_Speed);
-	Motor_Speed(output);
+    Last_Real_Target_Speed = real_target_speed;
 
-
-	return output;
+    output = (int16_t) PID_Controller_Calc(&pid_motor_ctrl, current_speed, Target_Speed, 0, 0);
+    Motor_Set_Current(output);
 }
